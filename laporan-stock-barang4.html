@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Laporan Stok Barang</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: grey;
+  font-family: sans-serif;
+}
+
+#main-container {
+  width: 90%;
+  background-color: white;
+  padding: 15px;
+  margin: auto;
+}
+
+#main-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#table-container {
+  width: 100%;
+  margin: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+td, th {
+  border: 1px solid black;
+  padding: 6px;
+  font-size: 14px;
+  text-align: center;
+}
+
+tfoot td {
+  font-weight: bold;
+}
+button {
+  padding: 8px 12px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+</style>
+</head>
+<body>
+<div id="main-container">
+  <h2>LAPORAN STOCK OPNAME BARANG PT. ABC<br>Periode 1–31 Agustus 2021</h2>
+
+  <div id="table-container">
+    <table id="stok-table">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Nama Barang</th>
+          <th>Harga Jual</th>
+          <th>Stok Awal</th>
+          <th>Nilai</th>
+          <th>Penjualan (Jumlah)</th>
+          <th>Nilai</th>
+          <th>Barang Masuk (Jumlah)</th>
+          <th>Nilai</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Beras 5Kg</td><td>25000</td><td>20</td><td>400000</td><td>7</td><td>175000</td><td>30</td><td>600000</td></tr>
+        <tr><td>2</td><td>Gula Pasir 1Kg</td><td>40000</td><td>20</td><td>600000</td><td>11</td><td>440000</td><td>30</td><td>900000</td></tr>
+        <tr><td>3</td><td>Minyak Goreng 1L</td><td>20000</td><td>20</td><td>300000</td><td>12</td><td>240000</td><td>30</td><td>450000</td></tr>
+        <tr><td>4</td><td>Telur Ayam 1Kg</td><td>10000</td><td>20</td><td>100000</td><td>4</td><td>40000</td><td>30</td><td>150000</td></tr>
+        <tr><td>5</td><td>Mie Instan</td><td>40000</td><td>20</td><td>400000</td><td>6</td><td>240000</td><td>30</td><td>600000</td></tr>
+        <tr><td>6</td><td>Kopi Bubuk 200g</td><td>130000</td><td>20</td><td>2000000</td><td>17</td><td>2210000</td><td>30</td><td>3000000</td></tr>
+        <tr><td>7</td><td>Susu Bubuk 400g</td><td>150000</td><td>20</td><td>2000000</td><td>2</td><td>300000</td><td>30</td><td>3000000</td></tr>
+        <tr><td>8</td><td>Kecap Manis 600ml</td><td>250000</td><td>20</td><td>4000000</td><td>1</td><td>250000</td><td>30</td><td>6000000</td></tr>
+        <tr><td>9</td><td>Garam 1Kg</td><td>10000</td><td>20</td><td>100000</td><td>5</td><td>50000</td><td>30</td><td>150000</td></tr>
+        <tr><td>10</td><td>Sarden Kaleng</td><td>75000</td><td>20</td><td>1400000</td><td>15</td><td>1125000</td><td>30</td><td>2100000</td></tr>
+        <tr><td>11</td><td>Bumbu Instan</td><td>25000</td><td>20</td><td>400000</td><td>13</td><td>325000</td><td>30</td><td>600000</td></tr>
+        <tr><td>12</td><td>Teh Celup</td><td>40000</td><td>20</td><td>700000</td><td>17</td><td>680000</td><td>30</td><td>1050000</td></tr>
+        <tr><td>13</td><td>Sabun Cuci Piring</td><td>50000</td><td>20</td><td>800000</td><td>6</td><td>300000</td><td>30</td><td>1200000</td></tr>
+        <tr><td>14</td><td>Sabun Mandi</td><td>30000</td><td>20</td><td>300000</td><td>11</td><td>330000</td><td>30</td><td>450000</td></tr>
+        <tr><td>15</td><td>Detergen Bubuk</td><td>35000</td><td>20</td><td>600000</td><td>10</td><td>350000</td><td>30</td><td>900000</td></tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3">TOTAL</td>
+          <td id="totalAwal"></td>
+          <td id="totalNilaiAwal"></td>
+          <td id="totalJual"></td>
+          <td id="totalNilaiJual"></td>
+          <td id="totalMasuk"></td>
+          <td id="totalNilaiMasuk"></td>
+        </tr>
+      </tfoot>
+    </table>
+    <button>Change to Colorfull</button>
+  </div>
+</div>
+
+<script>
+$(document).ready(function () {
+  // Hitung total otomatis
+  function hitungTotal() {
+    let totalAwal = 0, totalNilaiAwal = 0;
+    let totalJual = 0, totalNilaiJual = 0;
+    let totalMasuk = 0, totalNilaiMasuk = 0;
+
+    $("#stok-table tbody tr").each(function () {
+      totalAwal += parseInt($(this).find("td:eq(3)").text());
+      totalNilaiAwal += parseInt($(this).find("td:eq(4)").text());
+      totalJual += parseInt($(this).find("td:eq(5)").text());
+      totalNilaiJual += parseInt($(this).find("td:eq(6)").text());
+      totalMasuk += parseInt($(this).find("td:eq(7)").text());
+      totalNilaiMasuk += parseInt($(this).find("td:eq(8)").text());
+    });
+
+    $("#totalAwal").text(totalAwal);
+    $("#totalNilaiAwal").text(totalNilaiAwal.toLocaleString());
+    $("#totalJual").text(totalJual);
+    $("#totalNilaiJual").text(totalNilaiJual.toLocaleString());
+    $("#totalMasuk").text(totalMasuk);
+    $("#totalNilaiMasuk").text(totalNilaiMasuk.toLocaleString());
+  }
+
+  hitungTotal();
+
+  // Warna default (colorless)
+  colorLess();
+
+  $("button").click(function () {
+    var textButton = $(this).text();
+
+    if (textButton == "Change to Colorfull") {
+      $(this).text("Change to Colorless");
+      colorFull();
+    } else {
+      $(this).text("Change to Colorfull");
+      colorLess();
+    }
+  });
+
+  function colorLess() {
+    $("thead").css({"background":"black","color":"white"});
+    $("tbody tr:even").css({"background":"#CCCCCC","color":"black"});
+    $("tbody tr:odd").css({"background":"white","color":"black"});
+    $("button").css({"background":"#CCCCCC","color":"black"});
+  }
+
+  function colorFull() {
+    $("thead").css({"background":"red","color":"white"});
+    $("tbody tr:even").css({"background":"blue","color":"white"});
+    $("tbody tr:odd").css({"background":"yellow","color":"black"});
+    $("button").css({"background":"red","color":"white"});
+  }
+});
+</script>
+</body>
+</html>
